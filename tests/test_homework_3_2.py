@@ -3,9 +3,9 @@ import pytest
 
 class TestUserAuth:
     expected_values = [
-        ("hw_value"),
-        ("hw_value1"),
-        ("")
+        "hw_value",  # correct value
+        "hw_value1",  # wrong value
+        ""  # empty value
     ]
 
     @pytest.mark.parametrize('expected_value', expected_values)
