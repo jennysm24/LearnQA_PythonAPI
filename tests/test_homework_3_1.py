@@ -1,3 +1,7 @@
+import pytest
+
+
+@pytest.mark.skip(reason="This test is skipped as it requires manual actions")
 class TestLength:
     def test_length(self):
         phrase = input("Set a phrase: ")
