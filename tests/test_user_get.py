@@ -1,19 +1,26 @@
+import allure
+
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
 
 
+@allure.epic("Cases for GET request")
 class TestUserGet(BaseCase):
+    @allure.tag('smoke', 'regression')
+    @allure.description("Test to get user details without auth")
     def test_get_user_details_not_auth(self):
         id = 2
         url = f"https://playground.learnqa.ru/api/user/{id}"
-        #response = requests.get(url)
+        # response = requests.get(url)
         response = MyRequests.get("/user/2")
         Assertions.assert_json_has_key(response, "username")
         Assertions.assert_json_has_not_key(response, "email")
         Assertions.assert_json_has_not_key(response, "firstName")
         Assertions.assert_json_has_not_key(response, "lastName")
 
+    @allure.tag('negative', 'regression')
+    @allure.description("Test to get user details")
     def test_get_user_details_auth_as_same_user(self):
         url = "https://playground.learnqa.ru/api/user/login"
         data = {
@@ -21,7 +28,7 @@ class TestUserGet(BaseCase):
             'email': 'vinkotov@example.com'
         }
 
-        #response1 = requests.post(url, data=data)
+        # response1 = requests.post(url, data=data)
         response1 = MyRequests.post("/user/login", data=data)
 
         auth_sid = self.get_cookie(response1, "auth_sid")
@@ -34,15 +41,10 @@ class TestUserGet(BaseCase):
         #                          cookies={"auth_sid": auth_sid}
         #                          )
         response2 = MyRequests.get(f"/user/{user_id_from_auth_method}",
-                                 headers={"x-csrf-token": token},
-                                 cookies={"auth_sid": auth_sid}
-                                 )
+                                   headers={"x-csrf-token": token},
+                                   cookies={"auth_sid": auth_sid}
+                                   )
 
         expected_fields = ["username", "email", "firstName", "lastName"]
 
         Assertions.assert_json_has_keys(response2, expected_fields)
-
-
-
-
-

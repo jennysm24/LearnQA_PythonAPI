@@ -1,9 +1,15 @@
+import allure
+
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
 
 
+@allure.epic("Cases for PUT request")
+@allure.link("https://software-testing.ru/lms/mod/assign/view.php?id=462978")
 class TestUserEdit(BaseCase):
+    @allure.tag("smoke", "regression")
+    @allure.link("https://software-testing.ru/lms/mod/assign/view.php?id=462978")
     def test_edit_just_created_user(self):
         # Register
         register_data = self.prepare_registration_data()
@@ -12,7 +18,6 @@ class TestUserEdit(BaseCase):
         response1 = MyRequests.post('/user/', data=register_data)
         Assertions.assert_code_status(response1, 200)
         Assertions.assert_json_has_key(response1, "id")
-
         email = register_data['email']
         first_name = register_data['firstName']
         password = register_data['password']

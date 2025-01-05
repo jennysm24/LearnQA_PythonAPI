@@ -1,9 +1,13 @@
+import allure
+
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
 
 
 class TestUserGet(BaseCase):
+    @allure.tag("negative", "regression")
+    @allure.description("this tests get request without auth")
     def test_get_user_details_not_auth(self):
         id = 2
         #url = f"https://playground.learnqa.ru/api/user/{id}"
@@ -14,6 +18,8 @@ class TestUserGet(BaseCase):
         Assertions.assert_json_has_not_key(response, "firstName")
         Assertions.assert_json_has_not_key(response, "lastName")
 
+    @allure.tag("smoke", "regression")
+    @allure.description("this tests get request with auth of the same user")
     def test_get_user_details_auth_as_same_user(self):
         url = "https://playground.learnqa.ru/api/user/login"
         data = {
@@ -27,12 +33,6 @@ class TestUserGet(BaseCase):
         auth_sid = self.get_cookie(response1, "auth_sid")
         token = self.get_header(response1, "x-csrf-token")
         user_id_from_auth_method = self.get_json_value(response1, "user_id")
-
-        #url2 = f"https://playground.learnqa.ru/api/user/{user_id_from_auth_method}"
-        # response2 = requests.get(url2,
-        #                          headers={"x-csrf-token": token},
-        #                          cookies={"auth_sid": auth_sid}
-        #                          )
         response2 = MyRequests.get(f"/user/{user_id_from_auth_method}",
                                  headers={"x-csrf-token": token},
                                  cookies={"auth_sid": auth_sid}
@@ -42,8 +42,8 @@ class TestUserGet(BaseCase):
 
         Assertions.assert_json_has_keys(response2, expected_fields)
 
-
-
+    @allure.tag("negative", "regression")
+    @allure.description("this tests get request without auth")
     def test_get_user_details_auth_as_different_existing_user(self):
         #url = "https://playground.learnqa.ru/api/user/login"
         data = {
@@ -58,11 +58,6 @@ class TestUserGet(BaseCase):
         token = self.get_header(response1, "x-csrf-token")
         user_id_from_auth_method = self.get_json_value(response1, "user_id")
         existing_user_id = 113500
-        #url2 = f"https://playground.learnqa.ru/api/user/{user_id_from_auth_method}"
-        # response2 = requests.get(url2,
-        #                          headers={"x-csrf-token": token},
-        #                          cookies={"auth_sid": auth_sid}
-        #                          )
         response2 = MyRequests.get(f"/user/{existing_user_id}",
                                    headers={"x-csrf-token": token},
                                    cookies={"auth_sid": auth_sid}

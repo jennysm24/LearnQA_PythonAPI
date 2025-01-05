@@ -1,9 +1,13 @@
+import allure
+
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
 
-
+allure.epic("Edit cases")
 class TestUserEdit(BaseCase):
+    @allure.tag("smoke", "regression")
+    @allure.description("this tests successfull edit")
     def test_edit_just_created_user(self):
         # Register
         register_data = self.prepare_registration_data()
@@ -45,6 +49,8 @@ class TestUserEdit(BaseCase):
                                              )
 
     # 1
+    @allure.tag("negative", "regression")
+    @allure.description("this tests edit for user without auth")
     def test_edit_user_without_auth(self):
         # EDIT
         new_name = "Changed Name"
@@ -57,6 +63,8 @@ class TestUserEdit(BaseCase):
                                              f"Expected 'Auth token not supplied', but got {response.text}")
 
     # 2
+    @allure.tag("negative", "regression")
+    @allure.description("this tests edit for user with auth of another user")
     def test_edit_user_with_auth_of_different_user(self):
         # EDIT
         new_name = "Changed Name"
@@ -86,6 +94,8 @@ class TestUserEdit(BaseCase):
         Assertions.assert_json_has_not_key(response2, "lastName")
 
     # 3
+    @allure.tag("negative", "regression")
+    @allure.description("this tests edit to wrong email")
     def test_edit_user_to_wrong_email(self):
         # EDIT
         new_email = "jennysmmail.ru"
@@ -103,6 +113,8 @@ class TestUserEdit(BaseCase):
                                              f"Expected 'Invalid email format', but got {response3.text}")
 
     # 4
+    @allure.tag("negative", "regression")
+    @allure.description("this tests edit to short firstname")
     def test_edit_user_to_short_firstname(self):
         # EDIT
         new_firstname = "T"
