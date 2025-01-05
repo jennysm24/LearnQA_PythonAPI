@@ -1,7 +1,8 @@
+import allure
 import requests
 import pytest
 
-
+@allure.epic("Headers tests with parametrization")
 class TestUserAuth:
     expected_values = [
         "HomeWork=hw_value",  # correct value
@@ -11,6 +12,7 @@ class TestUserAuth:
 
     @pytest.mark.parametrize('expected_value', expected_values)
     @pytest.mark.xfail(reason="Test with wrong or empty header value is expected to fail")
+    @allure.description("this tests the correct header")
     def test_auth_user(self, expected_value):
         data = {'email': 'vinkotov@example.com',
                 'password': '1234'}

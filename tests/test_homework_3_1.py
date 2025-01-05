@@ -1,7 +1,9 @@
+import allure
 import pytest
 
 
 @pytest.mark.skip(reason="This test is skipped as it requires manual actions")
+@allure.link("https://software-testing.ru/lms/mod/assign/view.php?id=462959")
 class TestLength:
     def test_length(self):
         phrase = input("Set a phrase: ")

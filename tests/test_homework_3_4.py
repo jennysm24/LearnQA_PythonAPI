@@ -1,7 +1,8 @@
+import allure
 import requests
 import pytest
 
-
+@allure.epic("Expected results for useк agents with parametrization")
 class TestUserAuth:
     user_agents = [
         #passed
