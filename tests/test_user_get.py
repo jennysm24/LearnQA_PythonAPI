@@ -5,7 +5,8 @@ from lib.my_requests import MyRequests
 
 class TestUserGet(BaseCase):
     def test_get_user_details_not_auth(self):
-        url = "https://playground.learnqa.ru/api/user/2"
+        id = 2
+        url = f"https://playground.learnqa.ru/api/user/{id}"
         #response = requests.get(url)
         response = MyRequests.get("/user/2")
         Assertions.assert_json_has_key(response, "username")
